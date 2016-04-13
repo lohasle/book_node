@@ -1,0 +1,102 @@
+{% extends '../../layout/layout.html' %}
+{% block title %}
+{% parent %}
+{% endblock %}
+
+{% block head %}
+{% parent %}
+{% endblock %}
+
+
+
+{% block page-main %}
+<!-- content -->
+<div class="main-content">
+    <!-- sort -->
+    <div class="class-sort">
+        <div class="sort-item large">
+            <div class="item-title">专长</div>
+            <div class="item-body" id="flt">
+                <ul>
+                    <li {% if data.ops.skill=='' %}class="active"{% endif %} >
+                        <a class="front-fn" href="/lecturer">全部</a>
+                    </li>
+                    {% for skill in data.skillList %}
+                        <li {% if data.ops.skill==skill.value%}class="active"{% endif %} data-id="{{skill.value}}">
+                            <a class="front-fn" href="/lecturer?skill={{skill.value}}">{{skill.name}}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--  名师风采 -->
+    <section class="c-s-item">
+        <div class="c-content">
+            <ul class="teachers alllist" id="pageList">
+                <!-- 讲师 -->
+                {% include "../../tpl/lecturer/front_lecturer_item.html" %}
+            </ul>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+
+
+{% block footer-js %}
+{% parent %}
+<script type="text/javascript">
+    jQuery(function ($) {
+        ;
+        (function () {
+            var $pageList = $("#pageList"),
+                    $flt = $("#flt"),
+                    pageNo = 1,
+                    pageSize = 8,
+                    lastOps = {},
+                    hasNext = true;
+
+            function getPageList(pn, ps, cbs) {
+                var fltVal = $flt.find("li.active").attr('data-id');// 分类值
+                var ops = {
+                    pageNo: pn,
+                    pageSize: ps,
+                    skill: fltVal,
+                };
+                if (JSON.stringify(lastOps) === JSON.stringify(ops)) {
+                    return false;
+                }
+                cbs && (cbs.before || $.noop).call();
+                $.get("/lecturer/list.html", ops, function (data) {
+                    lastOps = ops;
+                    $pageList.append(data);
+                    if ($.trim(data) == '') {
+                        hasNext = false;
+                    }
+                    cbs && (cbs.after || $.noop).call(this, data);
+                });
+            }
+
+            function initQry() {
+                pageNo = 1;
+                hasNext = true;
+                $pageList.html('');
+            }
+
+            // 滚动刷新
+            $(window).scroll(function () {
+                var viewH = $(window).height();//可见高度
+                var contentH = $("body").get(0).scrollHeight;//内容高度
+                var scrollTop = $("body").scrollTop();//滚动高度
+
+                if (scrollTop / (contentH - viewH) >= 0.95 && hasNext) {
+                    // 下一页
+                    getPageList((++pageNo), pageSize);
+                }
+            });
+        })();
+
+    });
+</script>
+{% endblock %}

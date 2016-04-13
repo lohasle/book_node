@@ -1,0 +1,124 @@
+{% extends '../../layout/backstage_layout.html' %}
+
+{% block title %}
+{% parent %}
+{% endblock %}
+
+{% block head %}
+{% parent %}
+{% endblock %}
+
+
+{% block content %}
+{% parent %}
+<!-- content -->
+<div class="am-g">
+    <div class="am-u-sm-12">
+        <!--<div class="am-tabs" id="doc-my-tabs">
+            <ul class="am-tabs-nav am-nav am-nav-tabs am-nav-justify">
+                <li class="am-active"><a href="">SEO设置</a></li>
+            </ul>
+            <div class="am-tabs-bd">
+                <div class="am-tab-panel am-active">
+
+                </div>
+                <div class="am-tab-panel">
+
+                </div>
+            </div>
+        </div>-->
+
+        <section class="am-panel am-panel-default">
+            <header class="am-panel-hd">
+                <h3 class="am-panel-title">重建ID</h3>
+            </header>
+            <div class="am-panel-bd">
+                <p>执行此程序，会重置讲师和课程的自增序号，从1开始，按创建时间顺序</p>
+                <button id='btn1' type="button" class="am-btn am-btn-primary am-radius">点此一键优化</button>
+            </div>
+
+        </section>
+
+        <section class="am-panel am-panel-default">
+            <header class="am-panel-hd">
+                <h3 class="am-panel-title">SEO关键词设置</h3>
+            </header>
+            <div class="am-panel-bd">
+                <form method="post" action="/backstage/sysConfig/seo" class="am-form bs-edit-form" id="editForm" enctype="application/x-www-form-urlencoded">
+                    <legend>
+                        关键字设置
+                    </legend>
+                    {% if ext %}
+                    {% set seo = JSON.parse(ext.value)%}
+                    {% endif %}
+                    <fieldset>
+                        <div class="am-form-group am-g">
+                            <div class="am-u-sm-2 am-text-right">
+                                <label for="edit-form-title">网站标题：</label>
+                            </div>
+                            <div class="am-u-sm-7 am-u-end">
+                                <input id="edit-form-title" name="title" value="{{seo.title}}" type="text"
+                                       placeholder="网站标题" required/>
+                            </div>
+                        </div>
+                        <div class="am-form-group am-g">
+                            <div class="am-u-sm-2 am-text-right">
+                                <label for="edit-form-keywords">网站关键字：</label>
+                            </div>
+                            <div class="am-u-sm-7 am-u-end">
+                                <input id="edit-form-keywords" name="keywords" value="{{seo.keywords}}" type="text"
+                                       placeholder="网站关键字" required/>
+                            </div>
+                        </div>
+                        <div class="am-form-group am-g">
+                            <div class="am-u-sm-2 am-text-right">
+                                <label for="edit-form-description">网站描述：</label>
+                            </div>
+                            <div class="am-u-sm-7 am-u-end">
+                                <textarea required id="edit-form-description" name="description" rows="6" placeholder="网站描述"  maxlength="200">{{seo.description}}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="am-form-group am-g">
+                            <div class="am-u-sm-2 am-text-right">
+                                <button type="submit" class="am-btn am-btn-primary am-radius">提交</button>
+                            </div>
+                        </div>
+
+                    </fieldset>
+
+                </form>
+            </div>
+        </section>
+
+    </div>
+</div>
+{% endblock %}
+
+
+{% block footer-js %}
+{% parent %}
+<script type="text/javascript">
+    jQuery(function ($) {
+        $("#btn1").click(function(){
+            // 重建ID
+            layer.confirm("此操作将重建讲师和课程的ID，如果ID已经重置过，误点。是否继续？",function(index){
+                layer.close(index);
+                // loading
+                var index = layer.load(2, {time: 10*1000});
+                $.post("/backstage/sysConfig/fixId",function(rep){
+                    if(rep.success==='true'){
+                        layer.alert("重置成功");
+                    }else{
+                        layer.alert("重置失败");
+                    }
+                    layer.close(index);
+                });
+            });
+        });
+
+        // SEO 信息编辑
+        bs.editForm(false,{form:"#editForm"});
+    });
+</script>
+{% endblock %}

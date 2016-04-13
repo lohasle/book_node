@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>{% block title %}书友会后台{% endblock %}</title>
+    {% block head %}
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+
+    <!-- font-awesome -->
+    <link rel="stylesheet" href="/css/font-awesome.min.css"/>
+
+    <!-- amaze -->
+    <link rel="stylesheet" href="/css/amaze/css/amazeui.min.css"/>
+    <link rel="stylesheet" href="/css/amaze/css/admin.css">
+    <link rel="stylesheet" href="/css/amaze/css/amazeui.datetimepicker.css">
+
+    <!-- common css -->
+    <link rel="stylesheet" href="/css/backstage-common.css">
+
+
+    <!-- datatable -->
+    <link href="/js/datatables/css/amazeui.datatables.min.css" rel="stylesheet">
+    <link href="/js/datatables/css/fixedHeader.dataTables.css" rel="stylesheet">
+    <style>
+        .am-form .am-table td {
+            word-break: break-all !important;
+        }
+    </style>
+    {% endblock %}
+</head>
+<body>
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+    以获得更好的体验！</p>
+<![endif]-->
+
+<div class="am-cf admin-main">
+
+    <!-- content start -->
+    <div class="admin-content">
+
+        {% if data.parent %}
+        <!-- 面包屑 -->
+        <div class="am-cf am-padding">
+            <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">{{data.parent.name}}</strong> /
+                <a title="点此打开新窗口"  href="javascript:openBankWin();"><small>{{data.current.name}}</small></a>
+            </div>
+        </div>
+        {% endif %}
+
+        {% block content %}
+
+        {% endblock %}
+    </div>
+    <!-- content end -->
+
+
+    {% block footer-js %}
+    <script type="text/javascript">
+        window.EVA = {
+            VERSION: "1.0.0",
+            XHR_SUCCESS: "true",
+            XHR_ERROR: "false",
+            debug: false//  is debug
+        };
+    </script>
+
+    <!-- common js -->
+    <!--[if (gte IE 9)|!(IE)]><!-->
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <!--<![endif]-->
+
+    <script src="/css/amaze/js/amazeui.min.js"></script>
+    <script src="/css/amaze/js/amazeui.datetimepicker.js"></script>
+
+    <!-- tools -->
+    <script src="/js/jquery.form.js"></script>
+    <script src="/js/lib/jquery.ajaxfileupload.js"></script>
+    <script src="/js/app/admin/common.js"></script>
+
+
+    <!--[if lt IE 9]>
+    <script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+    <script src="/css/amaze/js/amazeui.ie8polyfill.min.js"></script>
+    <script src="/js/iefix/html5shiv.min.js"></script>
+    <script src="/js/iefix/ie9.js"></script>
+    <![endif]-->
+
+
+    <!-- datatables -->
+    <script src="/js/datatables/js/amazeui.datatables.js"></script>
+    <script src="/js/datatables/js/dataTables.responsive.js"></script>
+    <script src="/js/datatables/js/dataTables.fixedHeader.js"></script>
+
+    <!-- layer.js -->
+    <script src="/js/layer/layer.js"></script>
+    <script src="/js/layer/extend/layer.ext.js"></script>
+
+    <script>
+        jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+            "chinese-string-asc": function (s1, s2) {
+                return s1.localeCompare(s2);
+            },
+
+            "chinese-string-desc": function (s1, s2) {
+                return s2.localeCompare(s1);
+            }
+        });
+    </script>
+    {% endblock %}
+</div>
+</body>
+</html>

@@ -1,0 +1,283 @@
+{% extends '../layout/layout.html' %}
+{% block title %}
+{% parent %}
+{% endblock %}
+
+{% block head %}
+{% parent %}
+{% endblock %}
+
+{% block menu-list-v %}
+<div class="menu-list-v">
+    <span class="m-c-s">全部课程分类</span>
+    <div class="m-c-d">
+        <ul class="c-d-ul">
+            {% for item in data.courseClassList  %}
+            <li>
+                <div class="d1">{{item.name}}</div>
+                <ul class="d2">
+                    {% for item2 in item.course.rows  %}
+                    <li><a href="/course/{{item2.seq}}" title="{{item2.title}}">{{item2.title|subBtyesStr(16)}}</a></li>
+                    {% endfor %}
+                </ul>
+                <i class="icon-rt"></i>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block page-main %}
+<!-- 主banner -->
+<div class="main-banner">
+    <!-- 留言板 -->
+    <div class="main-content">
+        <div class="form-panel">
+            <div class="title">
+                留言板
+            </div>
+            <div class="body">
+                <form onsubmit="return false;" id="yyForm">
+                    <div class="form-input">
+                        <input name="userName" type="text" placeholder="请填写用户名">
+                    </div>
+                    <div class="form-input">
+                        <input name="phone" type="text" placeholder="电话">
+                    </div>
+                    <div class="form-input">
+                        <textarea name="content" placeholder="课程类型：例如小儿推拿，针灸养生等。" rows="3"></textarea>
+                    </div>
+                    <div class="form-action">
+                        <input class="btn-sub-only full" type="submit" value="提交">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="banner-container" id="banner_1">
+        <ul class="slider-list">
+            {% for ad in data.ads%}
+                <li data-bg="{% if ad.bgColor&&ad.bgColor!='' %}{{ad.bgColor}}{% else %}#fff{% endif %}"><a style="background-image: url({{ad.img}})"  href="{{ad.href}}" {% if ad.href.indexOf("http")>-1 or ad.href.indexOf("https")>-1 %}target="_blank"{% endif %}></a></li>
+            {% endfor %}
+        </ul>
+        <ul class="slider-page">
+            {% for ad in data.ads%}
+            <li class="dot {% if loop.index==1 %}active{% endif %}"><a href="#"></a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+<!-- ad -->
+<div class="main-ad">
+    <div class="ad-content">
+        <ul>
+            <li>
+                <img src="images/icon_institution.png">
+
+                <div class="ad-info">
+                    <div class="ad-title">权威机构</div>
+                    <div class="ad-des">国内权威优质<br>教育机构合作</div>
+                </div>
+            </li>
+            <li>
+                <img src="images/icon_education.png">
+
+                <div class="ad-info">
+                    <div class="ad-title">专注教育</div>
+                    <div class="ad-des">线上学习&nbsp;&nbsp;线下交流<br>学习经典&nbsp;&nbsp;享受健康</div>
+                </div>
+            </li>
+            <li>
+                <img src="images/icon_Chinese-medicine.png">
+
+                <div class="ad-info">
+                    <div class="ad-title">专注中医</div>
+                    <div class="ad-des">更权威，更专业<br>为千万家庭服务</div>
+                </div>
+            </li>
+            <li>
+                <img src="images/icon_sale.png">
+
+                <div class="ad-info">
+                    <div class="ad-title">更多实惠</div>
+                    <div class="ad-des">低价享受高质服务<br>贴心知道轻松上手</div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<!-- content -->
+<div class="main-content">
+    <!--  热门课程 -->
+    <section class="c-s-item">
+        <div class="c-title">
+            <h2>
+                <span class="c-span">热门课程</span>
+                <a href="/course" class="bg-more ac-right">更多</a>
+            </h2>
+        </div>
+        <div class="c-content">
+            <ul class="active">
+                <!-- 输出课程 -->
+                {% include "../tpl/course/front_course_item.html" %}
+            </ul>
+        </div>
+    </section>
+    <!--  名师风采 -->
+    <section class="c-s-item">
+        <div class="c-title">
+            <h2>
+                <span class="c-span">名师风采</span>
+                <a href="javascript:;" class="btn-change ac-right" id="hyzBtn">
+                    换一组
+                </a>
+            </h2>
+        </div>
+        <div class="c-content" style="min-height: 390px">
+            <ul class="teachers" id="teachers">
+                <!-- 讲师 -->
+                {% include "../tpl/lecturer/front_lecturer_item.html" %}
+            </ul>
+        </div>
+    </section>
+    <!--  学员评价 -->
+    <section class="c-s-item c-s-talks">
+        <div class="c-title">
+            <h2>
+                <span class="c-span">学员评价</span>
+            </h2>
+        </div>
+        <div class="c-content">
+            <ul class="talks" id="talks">
+                <!-- 评论 -->
+                {% include "../tpl/course/front_comment_item.html" %}
+            </ul>
+        </div>
+        <div class="ad-right">
+            <div class="ad-span">
+                <a class="jgrz" href="http://jsform.com/web/formview/5674d88e0cf2896cb1937eb0" target="_blank">
+                    <i class="fa fa-bank wid-ac-icon"></i>
+
+                    <div class="wid-ac-p1">机构入驻</div>
+                    <div class="wid-ac-p2">免费发布培训信息</div>
+                </a>
+            </div>
+            <div class="ad-span">
+                <a class="jszm" target="_blank" href="http://www.jsform.com/web/formview/561693260cf279936f8003c9">
+                    <i class="fa fa-users wid-ac-icon"></i>
+
+                    <div class="wid-ac-p1">讲师招募</div>
+                    <div class="wid-ac-p2">欢迎您加入我们</div>
+                </a>
+            </div>
+            <div class="ad-span qrcode">
+                <h3>扫一扫关注微中医</h3>
+                <img src="images/hdnj.jpg">
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+
+
+{% block footer-js %}
+{% parent %}
+<script type="text/javascript">
+    jQuery(function ($) {
+        $("#banner_1 .slider-page").css("margin-left", -($("#banner_1 .slider-list>li").length) * 12);
+
+        //banner轮播
+        $("#banner_1").qslider({
+            contentSelecter: 'ul.slider-list>li',
+            thumbSelecter: 'ul.slider-page>li',
+            onContentCss: 'active',
+            onThumbCss: 'active',
+            model: 'fade',
+            delay: 5000
+        });
+
+        // 会话获取
+        ;
+        (function ($) {
+            // 获取新会话
+            var $talks = $("#talks");
+            var lastTime  = $talks.find("li:first .talk-time").attr("data-val");
+            function getNewTalk() {
+
+                $.getJSON("/course/comment/lastOne.json",{createTime:lastTime},function(req){
+                    if(req&&req.data){
+                        var data = req.data;
+                        lastTime = data.createTime;
+                        var html_temp = '<li><div class="talk-user-head"><img src="'+data.userId.avatar+'"alt="">' +
+                                '</div><div class="talk-main"><div class="talk-p1">' +
+                                '<span class="name">'+data.userId.userName+'</span></div>' +
+                                '<div class="talk-p2"><a href="course/'+data.seq+'">'+data.courseId.title+'</a></div>' +
+                                '<div class="talk-p3">' + data.content + '</div></div>' +
+                                '<div class="talk-time">' + new Date(data.createTime).format("yyyy-MM-dd hh:mm") + '</div>' +
+                                '</li>';
+                        $talks.append(html_temp); // append one
+                        $talks.children("li").eq(0).animate({
+                            height: 0,
+                            opacity: 'hide'
+                        }, function () {
+                            $(this).remove();
+                        });
+                    }
+                });
+            }
+
+            // 3S 执行一次
+            setInterval(getNewTalk, 3000);
+
+
+        })(jQuery);
+
+
+        // 换一组
+        var pt = $("#lecturerPt").attr("data-val");
+        $("#hyzBtn").click(function(){
+            var pageNo = fs.randomNum(1,pt);
+            $("#teachers").hide();
+            $.get("/lecturer/list.html", {pageNo:pageNo,pageSize:4,random:'true'}, function (tpl) {
+                $("#teachers").html(tpl).fadeIn();
+            });
+        });
+
+        // 预约
+        ;(function(){
+            var $yyForm = $("#yyForm");
+            $yyForm.submit(function(){
+                var $userName = $yyForm.find("input[name='userName']");
+                var $phone = $yyForm.find("input[name='phone']");
+                var $content = $yyForm.find("textarea[name='content']");
+                if($userName.val()!=''&&$phone.val()!=''&&$content.val()!=''){
+                    if(!fs.isPhone($phone.val())){
+                        alert("请填写正确的手机号码")
+                    }else if($content.val().length>500){
+                        alert("内容长度过长");
+                    }else{
+                        $.post("/feedback",{
+                            userName:$userName.val(),
+                            userPhone:$phone.val(),
+                            content:$content.val()
+                        },function(data){
+                            if(data.success=='true'){
+                                alert("留言成功");
+                                $yyForm[0].reset();
+                            }else{
+                                alert(data.data);
+                            }
+                        });
+                    }
+                }else{
+                    alert("请填写完全");
+                }
+            });
+        }());
+
+    });
+</script>
+{% endblock %}

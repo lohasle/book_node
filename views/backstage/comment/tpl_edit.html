@@ -1,0 +1,74 @@
+<form method="post" action="{{data.ops.actionUrl}}" class="am-form bs-edit-form" id="editForm" enctype="application/x-www-form-urlencoded">
+    {% set item = data.item %}
+    <legend>
+        {{data.ops.title}}
+    </legend>
+    <fieldset>
+        {% if item._id %}
+        <input name="_id" type="hidden" value="{{data.item._id.toString()}}">
+        {% endif %}
+
+        <div class="am-form-group  am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label for="edit-form-name">评论用户：</label>
+            </div>
+            <div class="am-u-sm-4 am-u-end">
+                <select id="edit-form-name" name="userId" required>
+                    <option value="">请选择</option>
+                    {% for cls in data.userList %}
+                    <option data-src="{{cls.avatar}}" {% if item.userId==cls._id.toString() %} selected {% endif %}
+                            value="{{cls._id.toString()}}">{{cls.userName}}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="am-u-sm-4 am-u-end">
+                <img style="height: 70px;width: 70px;" id="avatarImg"/>
+            </div>
+        </div>
+
+        <div class="am-form-group  am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label for="edit-form-courseClassId">评论课程：</label>
+            </div>
+            <div class="am-u-sm-4 am-u-end">
+                <select id="edit-form-courseClassId" name="courseId" required>
+                    <option value="">请选择</option>
+                    {% for cls in data.courseList %}
+                    <option {% if item.courseId==cls._id.toString() %} selected {% endif %}
+                            value="{{cls._id.toString()}}">{{cls.title}}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="am-form-group  am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label for="edit-form-summary">评论内容：</label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <textarea required id="edit-form-summary" name="content" rows="6"
+                          maxlength="500">{{item.content}}</textarea>
+            </div>
+            <div class="am-u-sm-2 am-u-end">
+                建议500字以内
+            </div>
+        </div>
+
+    </fieldset>
+</form>
+<script>
+    $(function(){
+        function loadAvatar(){
+            var $avatarImg = $("#avatarImg");
+            var opstion = $("#edit-form-name").find("option:selected");
+            $avatarImg.attr("src",opstion.attr("data-src"));
+        }
+
+        loadAvatar();
+
+        $("#edit-form-name").change(function(){
+            loadAvatar();
+        });
+    });
+</script>

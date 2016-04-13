@@ -1,0 +1,527 @@
+{% extends '../../layout/backstage_layout.html' %}
+
+{% block title %}
+{% parent %}
+{% endblock %}
+
+{% block head %}
+{% parent %}
+{% endblock %}
+
+
+{% block content %}
+{% parent %}
+<form method="post" action="{{data.ops.actionUrl}}" class="am-form bs-edit-form" id="editForm" enctype="application/x-www-form-urlencoded">
+    {% set item = data.item %}
+    <legend>
+        {{data.ops.title}}
+    </legend>
+
+    <fieldset>
+        {% if item._id %}
+        <input name="_id" type="hidden" value="{{data.item._id.toString()}}">
+        {% endif %}
+
+        <div class="am-form-group  am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label for="edit-form-title">课程标题：</label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <input id="edit-form-title" name="title" value="{{item.title}}" type="text"
+                       placeholder="课程标题" required/>
+            </div>
+        </div>
+
+        <div class="am-form-group am-g am-form-file">
+            <div class="am-u-sm-2 am-text-right">
+                <label for="edit-form-avatar">封面照片：</label>
+            </div>
+            <div class="am-u-sm-3 photoFile">
+                <img {% if item.frontImg %}style="max-width: 200px" src="{{item.frontImg}}" {% endif %}>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <div>
+                    <button type="button" class="am-btn am-btn-default am-btn-sm">
+                        <i class="am-icon-cloud-upload"></i> 选择要上传的图片
+                        （<em>建议尺寸480*284</em>）
+                    </button>
+                </div>
+                <input name="file" type="file" id="edit-form-avatar">
+                <input name="frontImg" type="hidden" value="{{item.frontImg}}">
+            </div>
+        </div>
+
+
+        <div class="am-form-group am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label for="edit-form-courseClassId">课程分类：</label>
+            </div>
+            <div class="am-u-sm-4 am-u-end">
+                <select id="edit-form-courseClassId" name="courseClassId" required>
+                    <option value="">请选择</option>
+                    {% for cls in item.ext.courseClasses %}
+                    <option {% if item.courseClassId.toString()===cls._id.toString() %} selected {% endif %}
+                            value="{{cls._id.toString()}}">{{cls.name}}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="am-form-group am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label>所属讲师：</label>
+            </div>
+
+            <div class="am-u-sm-4 am-u-end">
+                <div class="am-input-group">
+                    <input id="lecturerName" type="text" disabled required value="{{item.lecturerId.name}}">
+                    <input id="lecturerId" name="lecturerId" value="{{item.lecturerId._id.toString()}}" type="hidden"
+                           placeholder="所属讲师" required/>
+                    <span id="selectBtn" class="am-input-group-label add-on" style="cursor: pointer">选择讲师</span>
+                </div>
+            </div>
+
+            <div class="am-u-sm-4 am-u-end hide">
+                <!--<select id="edit-form-lecturerId" name="lecturerId" required>
+                    <option value="">请选择</option>
+                    {% for les in item.ext.lecturers %}
+                    <option {% if item.lecturerId.toString()===les._id.toString() %} selected {% endif %}
+                            value="{{les._id.toString()}}">{{les.name}}
+                    </option>
+                    {% endfor %}
+                </select>-->
+            </div>
+        </div>
+
+
+        <div class="am-form-group am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label>课程开始时间：</label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <div class="am-input-group date" id="beginTimePicker" data-date-format="yyyy-mm-dd hh:ii">
+                    <input  type="text"
+                           value="{% if item.beginTime %}{{item.beginTime|mdate('YYYY-MM-DD HH:mm')}}{% endif %}"
+                           class="am-form-field" placeholder="开始时间" id="beginTime"
+                           name="beginTime">
+                    <span class="am-input-group-label add-on"><i class="icon-th am-icon-calendar"></i></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="am-form-group am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label>课程结束时间：</label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <div class="am-input-group date" id="endTimePicker" data-date-format="yyyy-mm-dd hh:ii">
+                    <input  type="text"
+                           value="{% if item.endTime %}{{item.endTime|mdate('YYYY-MM-DD HH:mm')}}{% endif %}"
+                           class="am-form-field" placeholder="结束时间" id="endTime"
+                           name="endTime">
+                    <span class="am-input-group-label add-on"><i class="icon-th am-icon-calendar"></i></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="am-form-group  am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label for="edit-form-summary">简介：</label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <textarea required id="edit-form-summary" name="summary" rows="6"
+                          maxlength="500">{{item.summary}}</textarea>
+            </div>
+            <div class="am-u-sm-2 am-u-end">
+                建议500字以内
+            </div>
+        </div>
+
+
+        <hr>
+        <!-- 拓展内容 -->
+        <div id="extInfos">
+            <div class="am-form-group am-g first hide">
+                <div class="am-u-sm-2 am-text-right">
+                    &nbsp;
+                </div>
+                <div class="am-u-sm-7 am-u-end">
+                    <h6>拓展属性编辑</h6>
+                </div>
+            </div>
+            {% if item.extInfo&&item.extInfo.length>0 %}
+            {% set info =item.extInfo[0] %}
+            {%else%}
+            {% set info ={} %}
+            {% endif %}
+            <div class="am-form-group  am-g my-ue">
+                <div class="am-u-sm-2 am-text-right">
+                    <label>
+                        文章编辑：
+                    </label>
+                </div>
+                <div class="am-u-sm-7 am-u-end">
+                    <input name="extInfoKeys" type="hidden" value="文章内容">
+                    <script id="editorContainer" name="extInfoKeysValues" type="text/plain">{{info.val|safe}}
+
+                    </script>
+                </div>
+            </div>
+
+        </div>
+        <hr>
+
+
+        <div class="am-form-group  am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label for="edit-form-periodsCount">课时数量：</label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <input id="edit-form-periodsCount" name="periodsCount" value="{{item.periodsCount}}" type="number"
+                       placeholder="课时数量"/>
+            </div>
+        </div>
+
+        <div class="am-form-group  am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label for="edit-form-sourcePrice">原价格：</label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <input id="edit-form-sourcePrice" name="sourcePrice" value="{{item.sourcePrice}}" type="number"
+                       placeholder="原价格" />
+            </div>
+        </div>
+
+        <div class="am-form-group  am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label for="edit-form-currentPrice">实际价格：</label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <input id="edit-form-currentPrice" name="currentPrice" value="{{item.currentPrice}}" type="number"
+                       placeholder="实际价格"/>
+            </div>
+        </div>
+
+        <div class="am-form-group  am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label for="edit-form-sourcePersonNum">计划参加人数：</label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <input id="edit-form-sourcePersonNum" name="sourcePersonNum" value="{{item.sourcePersonNum}}"
+                       type="number"
+                       placeholder="计划人数" />
+            </div>
+        </div>
+
+        <div class="am-form-group  am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label for="edit-form-currentPersonNum">当前参加人数：</label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <input id="edit-form-currentPersonNum" name="currentPersonNum" value="{{item.currentPersonNum}}"
+                       type="number"
+                       placeholder="当前人数" />
+            </div>
+        </div>
+
+        <div class="am-form-group  am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label for="edit-form-address1">简要地址：</label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <input id="edit-form-address1" name="address1" value="{{item.address1}}" type="text"
+                       placeholder="简要地址"/>
+            </div>
+            <div class="am-u-sm-3 am-u-end">
+               推荐格式如（南山·科技园）
+            </div>
+        </div>
+
+
+        <div class="am-form-group  am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label for="edit-form-fullAddress">详细地址：</label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <input id="edit-form-fullAddress" name="fullAddress" value="{{item.fullAddress}}" type="text"
+                       placeholder="详细地址"/>
+            </div>
+        </div>
+
+        <div class="am-form-group  am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label for="edit-form-bmUrl">报名连接：</label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <input id="edit-form-bmUrl" name="bmUrl" value="{{item.bmUrl}}" type="text"
+                       placeholder="报名连接" required/>
+            </div>
+        </div>
+
+        <div class="am-form-group  am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label for="edit-form-collectionCount">收藏数量：</label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <input id="edit-form-collectionCount" name="collectionCount" value="{{item.collectionCount}}"
+                       type="number"
+                       placeholder="收藏数量"/>
+            </div>
+        </div>
+
+        <div class="am-form-group am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label>是否热门： </label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <label class="am-radio-inline">
+                    <input {% if item.isHot %}checked{% endif %} type="radio" value="true" name="isHot"> 是
+                </label>
+                <label class="am-radio-inline">
+                    <input {% if !item.isHot %}checked{% endif %} type="radio" value="false" name="isHot"> 否
+                </label>
+            </div>
+        </div>
+
+        <div class="am-form-group am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label>状态： </label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <label class="am-radio-inline">
+                    <input {% if item.isAvalible===undefined or item.isAvalible %}checked{% endif %} type="radio"
+                           value="true" name="isAvalible"> 显示
+                </label>
+                <label class="am-radio-inline">
+                    <input {% if !item.isAvalible and item.isAvalible!==undefined %}checked{% endif %} type="radio"
+                           value="false" name="isAvalible"> 隐藏
+                </label>
+            </div>
+        </div>
+
+    </fieldset>
+</form>
+{% endblock %}
+
+
+{% block footer-js %}
+{% parent %}
+
+<textarea style="display: none" id="ueTpl">
+        <div class="am-form-group  am-g my-ue">
+            <div class="am-u-sm-2 am-text-right">
+                <label>
+                    <input name="extInfoKeys" value="" class="ext-input" placeholder="请填写内容">
+                </label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <script id="container${ueId}" name="extInfoKeysValues" type="text/plain"></script>
+            </div>
+            <div class="am-u-sm-2 am-u-end hide">
+                <p>
+                    <a class="am-btn am-btn-warning ueDel">
+                        <i class="am-icon-minus"></i>
+                        删除
+                    </a>
+                </p>
+                <p>
+                    <a class="am-btn am-btn-secondary ueAdd" data-method="before">
+                        <i class="am-icon-plus"></i>
+                        向前插入
+                    </a>
+                </p>
+                <p>
+                    <a class="am-btn am-btn-secondary ueAdd" data-method="after">
+                        <i class="am-icon-plus"></i>
+                        向后插入
+                    </a>
+                </p>
+            </div>
+        </div>
+</textarea>
+
+<!-- 医生选择模板 begin -->
+<script type="text/html" id="selectWin">
+    <!-- search -->
+    <div class="am-cf am-padding">
+        <form id="selectSearchForm" class="am-form-inline align-center searchForm" role="form">
+            <input type="hidden" value="true" name="isAvalible">
+            <div class="am-form-group">
+                <label class="search-label">姓名</label>
+                <input name="name" class="search-input" type="text" placeholder="姓名">
+            </div>
+            <div class="am-form-group">
+                <label class="search-label">电话</label>
+                <input name="phone" class="search-input" type="text" placeholder="电话">
+            </div>
+            <div class="am-form-group">
+                <button type="submit" class="am-btn am-btn-primary am-radius btn-search">
+                    <i class="am-icon-search"></i>
+                    搜索
+                </button>
+                <button type="button" class="am-btn am-btn-warning am-radius btn-reset">
+                    <i class="am-icon-retweet"></i>
+                    重置
+                </button>
+            </div>
+        </form>
+    </div>
+
+
+    <!-- table -->
+    <table class="am-table am-table-striped am-table-hover table-main am-table-bordered" id="selectTable">
+    </table>
+</script>
+<!-- 医生选择模板 end -->
+
+<!-- 配置文件 -->
+<script type="text/javascript" src="/ueditor/ueditor.config.js"></script>
+<!-- 编辑器源码文件 -->
+<script type="text/javascript" src="/ueditor/ueditor.all.js"></script>
+
+<script type="text/javascript">
+    jQuery(function ($) {
+
+        // ue
+        ;
+        (function () {
+            new UE.ui.Editor({initialFrameHeight: 400, autoHeightEnabled: true}).render("editorContainer");
+        }());
+
+        // form init
+        ;
+        (function () {
+            //开始时间
+            $("#beginTimePicker").datetimepicker({
+                language: 'zh-CN',
+                autoclose: true,
+                startView: 2,
+                minView: 'hour',
+                maxView: '1',
+                todayHighlight: true
+            }).on("changeDate", function (ev) {
+                var date = $("#beginTimePicker").find("#beginTime").val();
+                $("#endTimePicker").datetimepicker("setStartDate",date);
+            });
+
+            // 结束时间
+            $("#endTimePicker").datetimepicker({
+                language: 'zh-CN',
+                autoclose: true,
+                startView: 2,
+                minView: 'hour',
+                maxView: '1',
+                todayHighlight: true
+            });
+
+            // file ajax 监听
+            bs.bkUploadFileListener($("#edit-form-avatar"), "images");
+        }());
+
+        // 讲师选择
+        (function(){
+            $("#selectBtn,#lecturerName").click(function(){
+                layer.open({
+                    type:1,
+                    content:$("#selectWin").html(),
+                    btn: ['确定','取消'],
+                    area: ['95%','95%'],
+                    maxmin:'false',
+                    yes:function(index){
+                        // 确定
+                        var $tr = $('#selectTable').find("tr.am-primary");
+                        if($tr.length===0){
+                            alert("请选择讲师");
+                        }else{
+                            var id = $tr.find("td:eq(0)").html();
+                            var name = $tr.find("td:eq(2)").html();
+                            $("#lecturerName").val(name);
+                            $("#lecturerId").val(id);
+                            layer.close(index); // 关闭窗口
+                        }
+                    },
+                    cancel:function(){
+                        // 取消
+                    },
+                    success:function(layero, index){
+                        // table 渲染
+                        buildSelectTable();
+                    }
+                });
+            });
+
+
+            function buildSelectTable(){
+                // 列表
+                var dataTable = $('#selectTable').DataTable({
+                    bProcessing: true,
+                    bServerSide: true,
+                    responsive: true,
+                    serverSide: true,
+                    searching: false,
+                    fixedHeader: true,
+                    pagingType: "full_numbers",
+                    order: [4, 'desc'],//默认排序
+//            lengthMenu: [ [-1,10, 25, 50], ["All",10, 25, 50] ], //自定义每页数量的时候,下拉菜单的选项
+                    ajax: {
+                        url: "/backstage/lecturer/list.json",
+                        data: function (data) {
+                            var searchFormData = $("#selectSearchForm").serializeArray();
+                            var resultData = {
+                                dataTablesReqPar: JSON.stringify(data)
+                            };
+                            // 附加搜索条件
+                            for (var i = 0; i < searchFormData.length; i++) {
+                                var par = searchFormData[i];
+                                resultData[par['name']] = par['value'];
+                            }
+                            return resultData;
+                        }
+                    },
+                    columns: [
+                        {data: "_id", sTitle: "id", name: '_id', orderable: false},
+                        {
+                            data: "avatar", sTitle: "头像", orderable: false,
+                            render: function (data, type, full, meta) {
+                                if (data) {
+                                    return '<img src="' + data + '" style="height: 70px;width: 70px">';
+                                }
+                            }
+                        },
+                        {data: "name", sTitle: "姓名", name: 'name', orderable: false},
+                        {data: "phone", sTitle: "电话", orderable: false},
+                        {
+                            data: "createTime", sTitle: "创建时间", name: 'createTime',
+                            render: function (data, type, full, meta) {
+                                if (data) {
+                                    return new Date(data).format("yyyy-MM-dd hh:mm:ss.S");
+                                }
+                            }
+                        }
+                    ]
+                });
+
+                // 选择
+                $('#selectTable').on( 'click', 'tr', function () {
+                    $(this).toggleClass('am-primary').siblings('tr').removeClass("am-primary");
+                } );
+
+                //搜索
+                $("#selectSearchForm").submit(function () {
+                    dataTable.draw();
+                    return false;
+                });
+                //重置搜索
+                $("#selectSearchForm").on("click",".btn-reset",function(){
+                    $("#searchForm")[0].reset();
+                    dataTable.draw();
+                    return false;
+                });
+            }
+        }());
+
+
+    });
+</script>
+{% endblock %}

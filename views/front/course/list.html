@@ -1,0 +1,145 @@
+{% extends '../../layout/layout.html' %}
+{% block title %}
+{% parent %}
+{% endblock %}
+
+{% block head %}
+{% parent %}
+<style>
+    #zt a {
+        color: #969696;
+    }
+
+    #zt a:hover, #zt .active a {
+        color: #000;
+    }
+</style>
+{% endblock %}
+
+
+{% block page-main %}
+<!-- content -->
+<div class="main-content">
+    <!-- sort -->
+    <div class="class-sort">
+        <div class="sort-item large" id="flt">
+            <div class="item-title">分类</div>
+            <div class="item-body">
+                <ul>
+                    <li {% if data.ops.courseClassId=='' %}class="active" {% endif %}>
+                        <a href="/course?orderBy={{data.ops.orderBy}}{% if data.ops.lecturerId!='' %}&lecturerId={{data.ops.lecturerId}}{% endif%}"
+                           class="front-fn">全部</a>
+                    </li>
+                    {% for courseClass in data.courseClasses %}
+                    <li data-id="{{courseClass._id.toString()}}" {% if data.ops.courseClassId==courseClass._id.toString() %}class="active" {% endif %}>
+                        <a class="front-fn"
+                           href="/course?orderBy={{data.ops.orderBy}}&courseClassId={{courseClass._id.toString()}}{% if data.ops.lecturerId!='' %}&lecturerId={{data.ops.lecturerId}}{% endif%}">{{courseClass.name}}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="sort-item large" id="jst">
+            <div class="item-title">讲师</div>
+            <div class="item-body">
+                <ul>
+                    <li {% if data.ops.lecturerId=='' %}class="active" {% endif %}>
+                        <a href="/course?orderBy={{data.ops.orderBy}}{% if data.ops.courseClassId!='' %}&courseClassId={{data.ops.courseClassId}}{% endif %}"
+                           class="front-fn">全部</a>
+                    </li>
+                    {% for lecturer in data.lecturers %}
+                    <li data-id="{{lecturer._id.toString()}}" {% if data.ops.lecturerId==lecturer._id.toString() %}class="active" {% endif %}>
+                        <a href="/course?orderBy={{data.ops.orderBy}}&lecturerId={{lecturer._id.toString()}}{% if data.ops.courseClassId!='' %}&courseClassId={{data.ops.courseClassId}}{% endif %}"
+                           class="front-fn" {% if lecturer.name.length>4 %}title="{{lecturer.name}}"{% endif %}>{{lecturer.name|subBtyesStr(8)}}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="sort-item normal hot-new" id="zt">
+            <div class="item-body">
+                <ul>
+                    <li data-val="new" {% if data.ops.orderBy=='new' %}class="active" {% endif %}>
+                        <a href="/course?orderBy=new{% if data.ops.courseClassId!='' %}&courseClassId={{data.ops.courseClassId}}{% endif %}{% if data.ops.lecturerId!='' %}&lecturerId={{data.ops.lecturerId}}{% endif%}">最新</a>
+                    </li>
+                    <li data-val="hot" {% if data.ops.orderBy=='hot' %}class="active" {% endif %}>
+                        <a href="/course?orderBy=hot{% if data.ops.courseClassId!='' %}&courseClassId={{data.ops.courseClassId}}{% endif %}{% if data.ops.lecturerId!='' %}&lecturerId={{data.ops.lecturerId}}{% endif%}">最热</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--  热门课程 -->
+    <section class="c-s-item">
+        <div class="c-content">
+            <ul class="active" id="courseList">
+                <!-- 课程 -->
+                {% include "../../tpl/course/front_course_item.html" %}
+            </ul>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+
+{% block footer-js %}
+{% parent %}
+<script type="text/javascript">
+    jQuery(function ($) {
+        ;
+        (function () {
+            var $courseList = $("#courseList"),
+                    $flt = $("#flt"),
+                    $jst = $("#jst"),
+                    $zt = $("#zt"),
+                    pageNo = 1,
+                    pageSize = 5,
+                    lastOps = {},
+                    hasNext = true;
+
+            function getCourseList(pn, ps, cbs) {
+                var fltVal = $flt.find("li.active").attr('data-id');// 分类值
+                var jltVal = $jst.find("li.active").attr('data-id');// 讲师值
+                var ztVal = $zt.find("li.active").attr('data-val');// 最新最热
+                var ops = {
+                    pageNo: pn,
+                    pageSize: ps,
+                    orderBy: ztVal,
+                    courseClassId: fltVal,
+                    lecturerId: jltVal
+                };
+                if (JSON.stringify(lastOps) === JSON.stringify(ops)) {
+                    return false;
+                }
+                cbs && (cbs.before || $.noop).call();
+                $.get("/course/list.html", ops, function (data) {
+                    lastOps = ops;
+                    $courseList.append(data);
+                    if ($.trim(data) == '') {
+                        hasNext = false;
+                    }
+                    cbs && (cbs.after || $.noop).call(this, data);
+                });
+            }
+
+            function initQry() {
+                pageNo = 1;
+                hasNext = true;
+                $courseList.html('');
+            }
+
+            // 滚动刷新
+            $(window).scroll(function () {
+                var viewH = $(window).height();//可见高度
+                var contentH = $("body").get(0).scrollHeight;//内容高度
+                var scrollTop = $("body").scrollTop();//滚动高度
+
+                if (scrollTop / (contentH - viewH) >= 0.95 && hasNext) {
+                    // 下一页
+                    getCourseList((++pageNo), pageSize);
+                }
+            });
+        })();
+    });
+</script>
+{% endblock %}

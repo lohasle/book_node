@@ -1,0 +1,22 @@
+{% for item in data.lecturerPage.rows %}
+<li>
+    <section class="i-teach-wrap">
+        <div class="i-teach-pic"><a href="/lecturer/{{item.seq}}" title="{{item.name}}">
+            <img alt="{{item.name}}" src="{{item.avatar}}"> </a>
+        </div>
+        <div class="i-teach-title"><a href="/lecturer/{{item.seq}}"
+                                      title="{{item.name}}">{{item.name}}</a>
+        </div>
+        <div class="i-teach-simple"><span>{{item.jobTitle}}</span></div>
+
+        <div class="i-q-txt">
+            <p class="i-teach-des">
+                {{item.summary}}
+            </p>
+        </div>
+        {% if loop.first  %}
+        <div style="display: none" id="lecturerPt" data-val="{{data.lecturerPage.pageTotal}}"></div>
+        {% endif %}
+    </section>
+</li>
+{% endfor %}

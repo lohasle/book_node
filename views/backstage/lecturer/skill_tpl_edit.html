@@ -1,0 +1,48 @@
+<form method="post" action="{{data.ops.actionUrl}}" class="am-form bs-edit-form" id="editForm" enctype="application/x-www-form-urlencoded">
+    {% set item = data.item %}
+    <legend>
+        {{data.ops.title}}
+    </legend>
+    <fieldset>
+        {% if item._id %}
+        <input name="_id" type="hidden" value="{{data.item._id.toString()}}">
+        {% endif %}
+        <input name="type" type="hidden" value="lecturer_skill">
+
+        <div class="am-form-group  am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label for="edit-form-name">专长名称：</label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <input id="edit-form-name" name="name" value="{{item.name}}" type="text"
+                       placeholder="专长名称" required/>
+            </div>
+        </div>
+
+        <div class="am-form-group am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label>状态： </label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <label class="am-radio-inline">
+                    <input {% if item.isAvalible %}checked{% endif %} type="radio" value="true" name="isAvalible"> 显示
+                </label>
+                <label class="am-radio-inline">
+                    <input {% if !item.isAvalible %}checked{% endif %} type="radio" value="false" name="isAvalible"> 隐藏
+                </label>
+            </div>
+
+        </div>
+
+        <div class="am-form-group am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label>排序字段： </label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <input name="orderCode" type="number" value="{{item.orderCode}}"/>
+            </div>
+
+        </div>
+
+    </fieldset>
+</form>

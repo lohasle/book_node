@@ -1,0 +1,98 @@
+{% extends '../../layout/layout.html' %}
+{% block title %}
+{% parent %}
+{% endblock %}
+
+{% block head %}
+{% parent %}
+<link href="css/review.css" rel="stylesheet">
+<link href="gallery/css/lightgallery.min.css" rel="stylesheet">
+<style>
+    .lg-actions .lg-prev {
+        left: 20px;
+        height: 83%;
+        top: 50px;
+        width: 70px;
+    }
+    .lg-actions .lg-prev:after {
+        content: "\e094";
+        font-size: 30px;
+        top: 50%;
+        position: absolute;
+    }
+    .lg-actions .lg-next {
+        right: 20px;
+        height: 83%;
+        top: 50px;
+        width: 70px;
+    }
+    .lg-actions .lg-next:before {
+        content: "\e095";
+        font-size: 30px;
+        top: 50%;
+        position: absolute;
+    }
+    .lg-actions .lg-next, .lg-actions .lg-prev{
+        background: transparent;
+    }
+</style>
+{% endblock %}
+
+
+{% block page-main %}
+<!-- content -->
+<div class="main-content">
+    <div class="review2">
+        {% for item in album.rows %}
+        <div class="col-6 album">
+            <a href="javascript:;" data-photos='{{JSON.stringify(item.albumId.photos|safe)}}'>
+                <img src="{{item.albumId.frontImg}}" alt="">
+                <div class="photo-des">
+                    <span>{{item.title}}</span>
+                    <span>{{item.beginTime|mdate('YYYY/MM/DD')}}</span>
+                    <span>{{item.address1}}</span>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% block footer-js %}
+{% parent %}
+<script type="text/javascript" src="gallery/js/lightgallery-all.js"></script>
+<script type="text/javascript">
+    jQuery(function ($) {
+
+        function buildImgItem(imgArr){
+            try {
+                imgArr = JSON.parse(imgArr);
+            }catch (e){
+
+            }
+            var html = '<div id="myGell">';
+            for(var i= 0,len=imgArr.length;i<len;i++){
+                var img = imgArr[i];
+                html+='<a data-sub-html="<p>'+img.des+'</p>"  id="myGella'+i+'" title="'+img.des+'" href="'+img.img+'"> <img src="'+img.img+'" /> </a>'
+            }
+            html+='</div>';
+            return html;
+        }
+
+        $(".review2").on("click",".album a",function(){
+            var photos = $(this).attr("data-photos");
+            var $html = $(buildImgItem(photos));
+//            $("body").append($html);
+
+            $html.lightGallery({
+                thumbnail:true
+            });
+            $html.find('#myGella0 img').trigger("click");
+        });
+    });
+</script>
+{% endblock %}
+

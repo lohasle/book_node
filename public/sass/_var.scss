@@ -1,0 +1,78 @@
+@charset "utf-8";
+/** 整站变量 **/
+
+@include border-box-sizing;
+/**----------------布局设置BEGIN--------------**/
+
+// susy 配置
+$susy: (
+  /* Tells Susy to use 12 columns */
+  columns: 12,/* Tells Susy to use border-box */
+global-box-sizing: border-box
+
+);
+
+/**内容宽度**/
+$main-content-width: 1200px;
+
+$main-content-width-min: 960px;
+
+/**字体大小**/
+$main-font-size: 14px;
+
+/**主字体风格**/
+$main-font-family:"Segoe UI", "Lucida Grande", Helvetica, Arial, "Microsoft YaHei", FreeSans, Arimo, "Droid Sans", "wenquanyi micro hei", "Hiragino Sans GB", "Hiragino Sans GB W3", FontAwesome, sans-serif;
+
+
+/**----------------布局设置BEGIN--------------**/
+
+
+
+/**----------------颜色设置BEGIN--------------**/
+
+/**5858灰色主色**/
+$article-font-color-gary: #585858;
+
+/**8d8d灰色主色**/
+$article-font-color-gary-low: #8d8d8d;
+
+/**d2d2d2分割线**/
+$article-font-color-gary-border: #d2d2d2;
+
+
+/**纯黑主色**/
+$main-color-black: #000000;
+
+/**纯白主色**/
+$main-color-write: #ffffff;
+
+
+/**灰主色 背景**/
+$foot-bg-color: #f5f5f5;
+
+
+/**主分割线颜色**/
+$border-color:#eaeaea;
+
+/**主彩-咖啡色**/
+$main-theme-color: #b88861;
+
+/**主彩-咖啡色-点击**/
+$main-theme-color-c: #a57a57;
+
+/** 竖行导航颜色 **/
+$nav-v-theme-color: #ac7d56;
+/** 竖行导航颜色-点击 **/
+$nav-v-theme-color-c: #9a704d;
+/** 竖行导航分割线颜色 **/
+$nav-v-theme-color-b: #b48a67;
+/**  banner **/
+$main-banner-bg-theme-color: #f7f0e0;
+
+
+/**----------------颜色设置END--------------**/
+
+$article-font-color-gary-border: #d2d2d2;
+
+
+

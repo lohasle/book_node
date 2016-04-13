@@ -1,0 +1,31 @@
+<form method="post" action="{{data.ops.actionUrl}}" class="am-form bs-edit-form" id="editForm" enctype="application/x-www-form-urlencoded">
+    {% set item = data.item %}
+    <legend>
+        {{data.ops.title}}
+    </legend>
+    <fieldset>
+        {% if item._id %}
+        <input name="_id" type="hidden" value="{{data.item._id.toString()}}">
+        {% endif %}
+
+        <div class="am-form-group  am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label for="edit-form-name">帖子ID：</label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <input id="edit-form-name" name="value" value="{{item.value}}" type="text"
+                       placeholder="帖子ID" />
+            </div>
+        </div>
+
+        <div class="am-form-group am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label>排序字段： </label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <input name="orderCode" type="number" value="{{item.orderCode}}"/>
+            </div>
+        </div>
+
+    </fieldset>
+</form>

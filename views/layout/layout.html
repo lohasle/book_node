@@ -1,0 +1,211 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    {% set seomate = "seomate"|globalVal %}
+    <title>{% block title %}{{seomate.title}}{% endblock %}</title>
+    {% block head %}
+    <meta name="keywords" content="{{seomate.keywords}}">
+    <meta name="description" content="{{seomate.description}}">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <link href="/css/common.css" rel="stylesheet">
+    <link href="/css/index.css" rel="stylesheet">
+    <link href="/css/font-awesome/font-awesome.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="/js/iefix/html5shiv.min.js"></script>
+    <script src="/js/iefix/ie9.js"></script>
+    <![endif]-->
+    {% endblock %}
+</head>
+<body>
+<div class="warp">
+    <div class="page-head">
+        <!-- 站群导航 -->
+        <div class="site-head">
+            <div class="site-left">
+                <ul class="menu">
+                    <li><a target="_blank" href="http://www.weizy.cn">微中医</a></li>
+                    <li><a target="_blank" href="http://v.weizy.cn">视频</a></li>
+                    <li><a target="_blank" href="javascript:;">商城</a></li>
+                    <li><a target="_blank" href="http://www.weizy.cn/forum.php">社区</a></li>
+                </ul>
+            </div>
+            <div class="site-right">
+                <ul class="menu">
+                    <li><a href="javascript:;"><i class="site-icon weibo"></i>微博</a></li>
+                    <li><a href="javascript:;"><i class="site-icon wechat"></i>微信</a></li>
+                    <li><a href="javascript:;">APP下载</a></li>
+                    <!--<li><a href="javascript:;">登录</a></li>
+                    <li><a href="javascript:;">注册</a></li>-->
+                </ul>
+            </div>
+        </div>
+        <!-- 本站导航 -->
+        <div class="nav-head">
+            <!-- logo -->
+            <div class="nb-logo">
+                <a href="/index">
+                    <div class="logo" style="border-right: 0"></div>
+                </a>
+                <div class="city hide"><!-- 先隐藏 -->
+                    <div class="city-txt">深圳</div>
+                    <div class="city-a">【<a href="javascript:;">切换</a>】</div>
+                </div>
+            </div>
+            <!-- search -->
+            <div class="nb-search">
+                <form onsubmit="" action="/search">
+                    <div class="search-input">
+                        <input id="searchInput" name="word" type="text" value="{{data.word}}" placeholder="搜索课程名称，讲师名称等" class="s-input">
+                        <input type="hidden" value="all" name="type">
+                        <input value="搜索" type="submit" class="s-btn">
+                    </div>
+
+                    <div class="search-hot">
+                        <span>热门搜索:</span>
+                        <a href="/search?word=针灸">针灸</a>
+                        <a href="/search?word=推拿">推拿</a>
+                        <a href="/search?word=中医">中医</a>
+                        <a href="/search?word=养生">养生</a>
+                    </div>
+                </form>
+                <div class="search-help hide" id="searchHelp">
+                    <div class="searchContent">
+
+                    </div>
+                    <div class="help-close">
+                        <a class="help-close-btn" href="javascript:;">关闭</a>
+                    </div>
+                </div>
+            </div>
+            <!-- tell -->
+            <div class="nb-tell">
+            </div>
+        </div>
+        <div class="nav-menu">
+            <div class="menu">
+                {% block menu-list-v %}
+
+                {% endblock %}
+                <div class="menu-list">
+                    <ul>
+                        <li {% if current=='index' %}class="active" {% endif %}><a href="/index">首页</a></li>
+                        <li {% if current=='course' %}class="active" {% endif %}><a href="/course">全部课程</a></li>
+                        <li {% if current=='review' %}class="active" {% endif %}><a href="/review">现场回顾</a></li>
+                        <li {% if current=='lecturer' %}class="active" {% endif %}><a href="/lecturer">讲师风采</a></li>
+                        <li><a href="javascript:;">直播课</a></li>
+                        <li><a target="_blank" href="http://www.jsform.com/web/formview/561693260cf279936f8003c9">讲师招募</a></li>
+                        <li><a target="_blank" href="http://www.jsform.com/web/formview/5621aa310cf2b7156d0542c9">志愿者招募</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-main">
+        {% block page-main %}{% endblock %}
+    </div>
+    <!-- foot -->
+    <div class="page-foot">
+        <div class="line1">
+            <div class="part one">
+                <img src="/images/ima_weizy.png">
+            </div>
+            <div class="part two">
+                <h3>官方QQ群</h3>
+
+                <p>中医反黑联盟QQ群：34586905</p>
+
+                <p>健康类合作APP群：345869087</p>
+
+                <p>深圳书友会APP群：345869088</p>
+            </div>
+            <div class="part three">
+                <h3>旗下微信</h3>
+
+                <p>我的微中医（hiweizy）</p>
+
+                <p>黄帝内径（neijinga）</p>
+
+                <p>针灸（zhenjiu）</p>
+            </div>
+            <div class="part four">
+                <h3>官方微博</h3>
+
+                <p>你好微中医</p>
+
+                <p>中医儿科好医生</p>
+
+                <p>中医妇科好医生</p>
+
+            </div>
+            <div class="part five">
+                <h3>联系我们</h3>
+
+                <p>电话：0755-22670882</p>
+
+                <p>邮箱：weizy@weizy.cn</p>
+
+                <p>深圳市南山区科技园维用科技大厦3楼</p>
+
+            </div>
+        </div>
+        <div class="line2">
+            <span>深圳思邈科技有限公司</span> <span>粤ICP备 14026347号-1</span>
+        </div>
+    </div>
+</div>
+{% block footer-js %}
+<script type="text/javascript" src="/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="/js/fc.js"></script>
+<script type="text/javascript" src="/js/template.js"></script>
+<script type="text/javascript">
+    jQuery(function ($) {
+        // 搜索提示
+        ;
+        (function ($) {
+
+            function createHelpHtml(txt) {
+                function _itemHtml(a, b) {
+                    return a != '' ? ('<div class="help-item"><span>' + a + '</span> <span>相关</span> <span>' + b + '</span> </div>') : '<div class="help-item"> <span>相关</span> <span>' + b + '</span> </div>';
+                }
+
+                return _itemHtml(txt, "课程") + _itemHtml(txt, "讲师");
+            }
+
+            function showSearch() {
+                var $inputval = $searchInput.val();
+                $searchContent.html((createHelpHtml($inputval)));
+                $searchContent.parent().slideDown();
+            }
+
+            function hideSearch() {
+                $searchContent.parent().slideUp();
+            }
+
+            var $searchInput = $("#searchInput");
+            var $searchContent = $("#searchHelp .searchContent");
+            $("body").on("input", "#searchInput", function () {
+                showSearch();
+            });
+            $("body").on("focus", "#searchInput", function () {
+                showSearch();
+            });
+            $("body").on("click", ".search-help .help-close-btn", function () {
+                hideSearch();
+            });
+            $("body").on("blur", "#searchInput", function () {
+                hideSearch();
+            });
+            $("body").on("click",'#searchHelp .help-item',function(){
+                var $this = $(this);
+                var word = $("#searchInput").val();
+                var type = $this.find("span:last").html();
+                location.href="/search?word="+word+'&type='+(type=='课程'?'course':'lecturer');
+            });
+        })(jQuery);
+    });
+</script>
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,147 @@
+{% extends '../../layout/backstage_layout.html' %}
+
+{% block title %}
+{% parent %}
+{% endblock %}
+
+{% block head %}
+{% parent %}
+{% endblock %}
+
+
+{% block content %}
+{% parent %}
+<!-- content -->
+<div class="am-cf">
+    <form id="searchForm" class="am-form-inline align-center" role="form">
+        <div class="am-form-group">
+            <label class="search-label">分类名称</label>
+            <input name="name" class="search-input" type="text" placeholder="分类名称">
+        </div>
+        <div class="am-form-group">
+            <label class="search-label">状态</label>
+            <select name="isAvalible" class="search-select">
+                <option value="true">正常</option>
+                <option value="false">隐藏</option>
+                <option value="">--请选择--</option>
+            </select>
+        </div>
+
+        <div class="am-form-group search-div">
+            <button type="submit" class="am-btn am-btn-primary am-radius btn-search">
+                <i class="am-icon-search"></i>
+                搜索
+            </button>
+            <button type="button" class="am-btn am-btn-warning am-radius btn-reset">
+                <i class="am-icon-retweet"></i>
+                重置
+            </button>
+            <button type="button" class="am-btn am-btn-secondary am-radius btn-add">
+                <i class="am-icon-plus"></i>
+                新增
+            </button>
+        </div>
+    </form>
+</div>
+<div class="am-g">
+    <div class="am-u-sm-12">
+        <form class="am-form" onsubmit="return false">
+            <table class="am-table am-table-striped am-table-hover table-main am-table-bordered" id="listTable">
+            </table>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block footer-js %}
+{% parent %}
+<script type="text/javascript">
+    jQuery(function ($) {
+
+
+        // 操作
+        ;(function($){
+
+            // 添加
+            $("#searchForm").on("click",".btn-add",function(){
+                bs.editForm('/backstage/course/class/0',{form:'#editForm',area:['600px','400px']},function(data){
+                    // 回调 刷新列表
+                    dataTable.draw();
+                });
+            });
+
+            // 编辑
+            $("#listTable").on("click","tr td .editBtn",function(){
+                var id = $(this).parent().parent().attr("data-id");
+                bs.editForm('/backstage/course/class/'+id,{form:'#editForm',area:['600px','400px']},function(data){
+                    // 回调 刷新列表
+                    dataTable.draw();
+                });
+            });
+
+
+            // 删除
+            /*$("#listTable").on("click","tr td .delBtn",function(){
+                var id = $(this).parent().parent().attr("data-id");
+
+            });*/
+        }(jQuery));
+
+        var dataTable = bs.dataTable("/backstage/course/class/list.json",{
+            fixedHeader:false,
+            dt:{
+                order: [2, 'asc'],//默认排序
+                columns: [
+                    {data: "name", sTitle: "分类名称", orderable: false},
+                    {
+                        data: "isAvalible", sTitle: "状态", name: "isAvalible",orderable: false,
+                        render: function (data, type, full, meta) {
+                            return data ? '正常' : '隐藏';
+                        }
+                    },
+                    {data: "orderCode", sTitle: "排序字段", orderable: true,name: 'orderCode'},
+                    {
+                        data: "createTime", sTitle: "创建时间", name: 'createTime',
+                        render: function (data, type, full, meta) {
+                            if (data) {
+                                return new Date(data).format("yyyy-MM-dd hh:mm:ss.S");
+                            }
+                        }
+                    },
+                    {
+                        data: "modifyTime", sTitle: "修改时间", name: 'modifyTime',
+                        render: function (data, type, full, meta) {
+                            if (data) {
+                                return new Date(data).format("yyyy-MM-dd hh:mm:ss.S");
+                            }
+                        }
+                    }
+                ],
+                columnDefs: [
+                    {
+                        targets: [5],
+                        sTitle:'操作',
+                        data: "ops",
+                        className: "_ops",
+                        searchable: false,
+                        orderable: false,
+                        render: function (data, type, full) {
+                            return '<div class="am-btn-toolbar" data-id="' + full._id + '">' +
+                                    '<div class="am-btn-group am-btn-group-xs">' +
+                                    '<button  class="am-btn am-btn-default am-btn-xs am-text-secondary editBtn"><span class="am-icon-pencil-square-o"></span>编辑</button>' +
+//                                '<button data-href="" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only delBtn"><span class="am-icon-trash-o"></span>删除</button>' +
+                                    '</div>' +
+                                    '</div>';
+                        }
+                    }
+                ]
+            }
+        });
+
+
+
+
+    });
+</script>
+{% endblock %}

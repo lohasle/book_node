@@ -1,0 +1,82 @@
+{% extends '../../layout/backstage_layout.html' %}
+
+{% block title %}
+{% parent %}
+{% endblock %}
+
+{% block head %}
+{% parent %}
+{% endblock %}
+
+
+{% block content %}
+{% parent %}
+<!-- content -->
+<div class="am-cf">
+    <form id="searchForm" class="am-form-inline align-center" role="form">
+        <div class="am-form-group">
+            <label class="search-label">用户名</label>
+            <input name="userName" class="search-input" type="text" placeholder="用户名">
+        </div>
+        <div class="am-form-group">
+            <label class="search-label">手机号</label>
+            <input name="userPhone" class="search-input" type="text" placeholder="手机号">
+        </div>
+
+        <div class="am-form-group search-div">
+            <button type="submit" class="am-btn am-btn-primary am-radius btn-search">
+                <i class="am-icon-search"></i>
+                搜索
+            </button>
+            <button type="button" class="am-btn am-btn-warning am-radius btn-reset">
+                <i class="am-icon-retweet"></i>
+                重置
+            </button>
+        </div>
+    </form>
+</div>
+<div class="am-g">
+    <div class="am-u-sm-12">
+        <form class="am-form" onsubmit="return false">
+            <table class="am-table am-table-striped am-table-hover table-main am-table-bordered" id="listTable"></table>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block footer-js %}
+{% parent %}
+
+<script type="text/javascript">
+    jQuery(function ($) {
+
+        var dataTable = bs.dataTable("/backstage/feedback/list.json",{
+            dt:{
+                order: [4, 'desc'],//默认排序
+                columns: [
+                    {
+                        data: "userName", sTitle: "用户名", orderable: false
+                    },
+                    {data: "userPhone", sTitle: "手机号", orderable: false},
+                    {
+                        data: "content", sTitle: "预约内容", orderable: false,
+                    },
+                    {data: "originIp", sTitle: "来源IP", orderable: false},
+                    {
+                        data: "createTime", sTitle: "创建时间", name: 'createTime',
+                        render: function (data, type, full, meta) {
+                            if (data) {
+                                return new Date(data).format("yyyy-MM-dd hh:mm:ss.S");
+                            }
+                        }
+                    }
+                ]
+            }
+        });
+
+
+
+    });
+</script>
+{% endblock %}

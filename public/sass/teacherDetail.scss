@@ -1,0 +1,48 @@
+@charset "utf-8";
+$copyright-year: unquote("2015");
+$company-name: unquote("lohas, https://github.com/lohasle");
+/*!
+  Copyright © #{$copyright-year}, #{$company-name} All Rights Reserved.
+*/
+@import "_base";
+
+/** 教师信息 **/
+.teacher-info{
+  @include container;
+  @include clearfix;
+  .teacher-photo{
+    float: left;
+    margin-left: 76px;
+    height: 302px;
+    width: 256px;
+    border: 1px solid $border-color;
+    padding: 16px;
+    background: $main-color-write;
+    &:hover{
+      border-color: #e8e8e8;
+      box-shadow: 6px 6px 0 rgba(0,0,0,0.06);
+    }
+    >img{
+      height: 100%;
+      width: 100%;
+    }
+  }
+  .teacher-des{
+    float: left;
+    font-size: 18px;
+    width: 715px;
+    margin-left: 56px;
+    .title{
+      color: $main-color-black;
+      margin-top: 50px;
+      font-size: 20px;
+      span{
+        margin-right: 15px;
+      }
+    }
+    .des{
+      margin-top: 40px;
+      color: $article-font-color-gary;
+    }
+  }
+}

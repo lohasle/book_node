@@ -1,0 +1,110 @@
+@charset "utf-8";
+$copyright-year: unquote("2015");
+$company-name: unquote("lohas, https://github.com/lohasle");
+/*!
+  Copyright © #{$copyright-year}, #{$company-name} All Rights Reserved.
+*/
+@import "_base";
+
+
+
+
+.page-main {
+  .main-banner {
+    background: $main-banner-bg-theme-color;
+    .banner-container {
+      height: 380px;
+      position: relative;
+      @include container;
+      @include clearfix;
+      // banner
+      .slider-list {
+
+        li > a {
+          cursor: pointer;
+          display: block;
+          background: no-repeat center;
+          width: 100%;
+          height: 380px;
+          img {
+            @include center-block;
+            display: block;
+          }
+        }
+
+      }
+      // banner page
+      .slider-page {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        margin-left: -24px;/** 默认 当有一张图时为12px **/
+        .dot{
+          background: url("../images/icon_circle_n.png") no-repeat center;
+          float: left;
+          height: 12px;
+          width: 12px;
+          margin-right: 10px;
+          &:hover,&.active{
+            background: url("../images/icon_circle_c.png") no-repeat center;
+          }
+        }
+      }
+    }
+  }
+  // ad
+  .main-ad{
+    width: 100%;
+    background: $main-color-write;
+    @include clearfix;
+    .ad-content{
+      text-align: left;
+      @include container($main-content-width static);
+      @include clearfix;
+      padding: 52px 0;
+      ul>li{
+        @include gallery(3 of 12);
+      }
+      .ad-info{
+        margin-left: 24px;
+        display: inline-block;
+        position: relative;
+        top: -10px;
+        .ad-title{
+          font-size: 20px;
+          padding-bottom: 14px;
+          color: $article-font-color-gary;
+        }
+        .ad-des{
+          font-size: 16px;
+          color: #a3a3a3;
+        }
+      }
+    }
+  }
+
+  .main-content{
+    @include container($main-content-width static);
+    position: relative;
+    // form
+    .form-panel {
+      z-index: 99;
+      width: 300px;
+      border: none;
+      background: $main-color-write;
+      position: absolute;
+      right: 0;
+      top: 25px;
+      .title {
+        padding-left: 20px;
+      }
+      input,textarea {
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+
+
+

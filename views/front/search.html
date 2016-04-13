@@ -1,0 +1,73 @@
+{% extends '../layout/layout.html' %}
+{% block title %}
+{% parent %}
+{% endblock %}
+
+{% block head %}
+{% parent %}
+<link href="/css/couseDetail.css" rel="stylesheet">
+{% endblock %}
+
+
+
+{% block page-main %}
+<!-- content -->
+<div class="main-content">
+    <!-- sort -->
+    <div class="class-sort">
+        <div class="search-class-item"><a data-type="course" {% if data.type=='course' or data.type=='all' %}class="active"{%endif%}  href="javascript:;">课程</a><span>({{data.coursePage.rowCount}})</span></div>
+        <div class="search-class-item"><a data-type="lecturer" {% if data.type=='lecturer' %}class="active"{%endif%} href="javascript:;">讲师</a><span>({{data.lecturerPage.rowCount}})</span></div>
+    </div>
+    <!--  热门课程 -->
+    <section class="c-s-item">
+        <div id="course" class="c-content" {% if data.type=='lecturer' %}style="display:none"{%endif%}>
+            <ul class="active">
+                <!-- 课程 -->
+                {% if data.coursePage.rowCount>0 %}
+                    {% include "../tpl/course/front_course_item.html" %}
+                {% else %}
+                    {% include "../tpl/common/front_no_search.html" %}
+                {% endif %}
+            </ul>
+        </div>
+        <div id="lecturer" class="c-content" {% if data.type=='course' or data.type=='all' %}style="display:none"{%endif%}>
+            <ul class="teachers" id="teachers">
+                <!-- 讲师 -->
+                {% if data.lecturerPage.rowCount>0 %}
+                    {% include "../tpl/lecturer/front_lecturer_item.html" %}
+                {% else %}
+                    {% include "../tpl/common/front_no_search.html" %}
+                {% endif %}
+            </ul>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+
+
+{% block footer-js %}
+{% parent %}
+<script type="text/javascript">
+    jQuery(function ($) {
+        // 切换搜索
+        $("body").on('click','.search-class-item',function(){
+            var $this = $(this);
+            var type = $this.find("a").attr("data-type");
+            var target =  $("#"+type);
+            $this.parent().find("a").removeClass("active");
+            $this.children('a').addClass("active");
+            target.siblings().hide();
+            target.fadeIn();
+        });
+        // 自动调整
+        var $course =  $("#course");
+        var type ='{{data.type}}';
+        if(type=='all'){
+            if($course.find(".no-search").length>0){
+                $(".search-class-item a[data-type='lecturer']").trigger('click');
+            }
+        }
+    });
+</script>
+{% endblock %}

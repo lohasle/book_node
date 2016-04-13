@@ -1,0 +1,118 @@
+<form method="post" action="{{data.ops.actionUrl}}" class="am-form bs-edit-form" id="editForm" enctype="application/x-www-form-urlencoded">
+    {% set item = data.item %}
+    <legend>
+        {{data.ops.title}}
+    </legend>
+    <fieldset>
+        {% if item._id %}
+        <input name="_id" type="hidden" value="{{data.item._id.toString()}}">
+        {% endif %}
+
+        <div class="am-form-group  am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label for="edit-form-name">广告标题：</label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <input id="edit-form-name" name="title" value="{{item.title}}" type="text"
+                       placeholder="广告标题" />
+            </div>
+        </div>
+
+        <div class="am-form-group am-g am-form-file">
+            <div class="am-u-sm-2 am-text-right">
+                <label>广告图片：</label>
+            </div>
+            <div class="am-u-sm-3 photoFile">
+                <img {% if item.img %}style="max-width: 200px" src="{{item.img}}" {% endif %}>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <div>
+                    <button type="button" class="am-btn am-btn-default am-btn-sm">
+                        <i class="am-icon-cloud-upload"></i> 选择要上传的图片
+                        （<em>建议尺寸app:480*240,网站:734*380</em>）
+                    </button>
+                </div>
+                <input name="file" type="file" id="edit-form-img">
+                <input name="img" type="hidden" value="{{item.img}}">
+            </div>
+        </div>
+
+
+        <div class="am-form-group  am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label for="custom">背景颜色：</label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <input id="custom" name="bgColor" value="{{item.bgColor}}" type="text"
+                       placeholder="#ffffff"  />
+            </div>
+            <div class="am-u-sm-2 am-u-end">
+                颜色值为16进制颜色表示，如#ffffff
+            </div>
+        </div>
+
+        <div class="am-form-group  am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label for="edit-form-href">广告链接：</label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <input id="edit-form-href" name="href" value="{{item.href}}" type="text"
+                       placeholder="广告链接"  />
+            </div>
+        </div>
+
+        <div class="am-form-group am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label for="type">广告类型：</label>
+            </div>
+            <div class="am-u-sm-4 am-u-end">
+                <select id="type" name="type" required>
+                    <option value="">请选择</option>
+                    <option {% if item.type=='app' %}selected{% endif %} value="app">app</option>
+                    <option {% if item.type=='site' %}selected{% endif %} value="site">site</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="am-form-group am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label for="type">广告位置：</label>
+            </div>
+            <div class="am-u-sm-4 am-u-end">
+                <select name="position" required>
+                    <option {% if item.position=='index' %}selected{% endif %} value="index">首页</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="am-form-group am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label>状态： </label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <label class="am-radio-inline">
+                    <input {% if item.isAvalible %}checked{% endif %} type="radio" value="true" name="isAvalible"> 显示
+                </label>
+                <label class="am-radio-inline">
+                    <input {% if !item.isAvalible %}checked{% endif %} type="radio" value="false" name="isAvalible"> 隐藏
+                </label>
+            </div>
+        </div>
+
+        <div class="am-form-group am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label>排序字段： </label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <input name="orderCode" type="number" value="{{item.orderCode}}"/>
+            </div>
+        </div>
+
+    </fieldset>
+</form>
+<script type="text/javascript">
+    jQuery(function ($) {
+        // file ajax 监听
+        bs.bkUploadFileListener($("#edit-form-img"), "ad");
+    });
+</script>

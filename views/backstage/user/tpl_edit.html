@@ -1,0 +1,47 @@
+<form method="post" action="{{data.ops.actionUrl}}" class="am-form bs-edit-form" id="editForm" enctype="application/x-www-form-urlencoded">
+    {% set item = data.item %}
+    <legend>
+        {{data.ops.title}}
+    </legend>
+    <fieldset>
+        {% if item._id %}
+        <input name="_id" type="hidden" value="{{data.item._id.toString()}}">
+        {% endif %}
+
+        <div class="am-form-group  am-g">
+            <div class="am-u-sm-2 am-text-right">
+                <label for="edit-form-name">用户名：</label>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <input required id="edit-form-name" name="userName" value="{{item.userName}}" type="text"
+                       placeholder="用户名" />
+            </div>
+        </div>
+
+        <div class="am-form-group am-g am-form-file">
+            <div class="am-u-sm-2 am-text-right">
+                <label>用户头像：</label>
+            </div>
+            <div class="am-u-sm-3 photoFile">
+                <img {% if item.avatar %}style="max-width: 200px" src="{{item.avatar}}" {% endif %}>
+            </div>
+            <div class="am-u-sm-7 am-u-end">
+                <div>
+                    <button type="button" class="am-btn am-btn-default am-btn-sm">
+                        <i class="am-icon-cloud-upload"></i> 选择要上传的图片
+                        （<em>70*70</em>）
+                    </button>
+                </div>
+                <input name="file" type="file" id="edit-form-img">
+                <input name="avatar" type="hidden" value="{{item.avatar}}">
+            </div>
+        </div>
+
+    </fieldset>
+</form>
+<script type="text/javascript">
+    jQuery(function ($) {
+        // file ajax 监听
+        bs.bkUploadFileListener($("#edit-form-img"), "avatar");
+    });
+</script>

@@ -1,0 +1,62 @@
+{% extends '../../layout/layout.html' %}
+{% block title %}
+{% parent %}
+{% endblock %}
+
+{% block head %}
+{% parent %}
+<link href="/css/teacherDetail.css" rel="stylesheet">
+{% endblock %}
+
+
+
+{% block page-main %}
+<!-- content -->
+<div class="main-content">
+    <!--  讲师简介 -->
+    <section class="c-s-item">
+        <div class="c-title">
+            <h2>
+                <span class="c-span">讲师介绍</span>
+            </h2>
+        </div>
+        <div class="c-content">
+            <div class="teacher-info">
+                <div class="teacher-photo">
+                    <img src="{{data.lecturer.avatar_big}}" alt="">
+                </div>
+                <div class="teacher-des">
+                    <div class="title"><span>{{data.lecturer.name}}</span><span>{{data.lecturer.jobTitle}}</span></div>
+                    <div class="des">
+                        {{data.lecturer.summary}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="c-s-item">
+        <div class="c-title">
+            <h2>
+                <span class="c-span">主讲课程</span>
+            </h2>
+        </div>
+        <div class="c-content">
+            <ul class="active">
+                <!-- 课程 -->
+                {% include "../../tpl/course/front_course_item.html" %}
+            </ul>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+
+
+{% block footer-js %}
+{% parent %}
+<script type="text/javascript">
+    jQuery(function ($) {
+
+    });
+</script>
+{% endblock %}

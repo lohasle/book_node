@@ -1,0 +1,167 @@
+{% extends '../../layout/layout.html' %}
+{% block title %}
+{% parent %}
+{% endblock %}
+
+{% block head %}
+{% parent %}
+<link href="/css/couseDetail.css" rel="stylesheet">
+<style>
+    .c-c-l-body p{
+        margin: 0;
+    }
+</style>
+{% endblock %}
+
+
+
+{% block page-main %}
+<!-- content -->
+<div class="main-content">
+    <article class="couse-detail">
+        <section class="c-s-item">
+            <div class="fl"><img src="{{data.course.frontImg}}" alt=""></div>
+            <div class="fr">
+                <!-- {{data.course.courseSeriesId.title}}—&nbsp;— -->
+                <h1 class="c-c-title"> {{data.course.title}}</h1>
+
+                <div class="c-c-price">
+                    <spam class="label">价格:</spam>
+                    <span class="txt">{% if data.course.currentPrice>0 %}¥{{data.course.currentPrice}}{% else %}免费{% endif %}</span>
+                </div>
+                <div class="c-c-des"><span class="label">主讲:</span><span class="txt">{{data.course.lecturerId.name}}</span></div>
+
+                <div class="c-c-des"><span class="label">开班时间:</span><span class="txt">{{data.course.beginTime|mdate('YYYY-MM-DD HH:mm')}}</span></div>
+
+                <div class="c-c-des"><span class="label">开班地点:</span><span class="txt">{{data.course.fullAddress}}</span></div>
+
+                <div class="c-c-action">
+                    <a target="_blank" href="{{data.course.bmUrl}}" class="c-c-join">立即报名</a>
+                    <!-- 分享 -->
+                    <div class="c-c-share"></div>
+                </div>
+            </div>
+        </section>
+        <section class="couse-container">
+            <div class="couse-c-l">
+                <div class="couse-c-l-item">
+                    <h2 class="c-c-l-title">
+                        <!--<i class="fg"></i>-->
+                        课程简介
+                    </h2>
+                    <div class="c-c-l-body">
+                        {{data.course.summary}}
+                    </div>
+                </div>
+
+                <div class="couse-c-l-item">
+                    {% if data.course.extInfo&&data.course.extInfo.length>0 %}
+                    {% set item =data.course.extInfo[0] %}
+                    <div class="c-c-l-body">
+                        {{item.val|safe}}
+                    </div>
+                    {%endif%}
+                </div>
+
+                <div class="couse-c-l-item hide">
+                    <h2 class="c-c-l-title">
+                        <i class="fg"></i>
+                        课程评价
+                    </h2>
+                    <div class="c-c-l-body">
+                        <form class="user-appraisal">
+                            <div class="u-a-content">
+                                <div class="u-a-p">
+                                    <img src="/images/icon_user_max_c.png" alt="">
+                                </div>
+                                <div class="u-a-b">
+                                    <input id="pj_csrf" type="hidden" name="_csrf" value="{{data.csrfToken}}">
+                                    <textarea id="comment" rows="4" placeholder="有啥高见？"></textarea>
+                                    <div class="u-a-action">
+                                        <a id="fbBtn" class="btn" href="javascript:;">发表</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="couse-c-l-item">
+                    <h2 class="c-c-l-title small">
+                        学员评论
+                    </h2>
+                    <div class="c-c-l-body border-top c-c-l-talks">
+                        <ul class="talks" id="talks">
+                            {% include "../../tpl/course/front_comment_item.html" %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="couse-c-r">
+                <div class="teacher-info">
+                    <div class="title">主讲老师</div>
+                    <div class="head-info">
+                        <div class="h-img">
+                            <a href="/lecturer/{{data.course.lecturerId.seq}}">
+                                <img src="{{data.course.lecturerId.avatar}}" alt="">
+                            </a>
+                        </div>
+                        <div class="h-des">
+                            <div class="h-name">{{data.course.lecturerId.name}}</div>
+                            <div title="{{data.course.lecturerId.jobTitle}}" class="h-simple">{{data.course.lecturerId.jobTitle | subBtyesStr(24)}}</div>
+                        </div>
+                    </div>
+                    <div class="des">
+                        {{data.course.lecturerId.summary}}
+                    </div>
+                </div>
+                <div class="couse-jinqi">
+                    <div class="c-j-t">近期开班</div>
+                    <ul class="c-j-l">
+                        {% for item in data.recentCourseList.rows %}
+                        <li><a href="/course/{{item.seq}}">{{item.title}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </article>
+
+</div>
+{% endblock %}
+
+
+
+{% block footer-js %}
+{% parent %}
+<script type="text/javascript">
+    jQuery(function ($) {
+        ;(function(){
+            // 发表评论
+            var $btn = $("#fbBtn"),
+                    $comment = $("#comment"),
+                    $talks =$("#talks"),
+                    courseId = '{{data.course._id.toString()}}',
+                    courseTitle = "{{data.course.title}}";
+            $btn.click(function(){
+                var val = $comment.val();
+                if(!fs.strNotNull(val)){
+                    alert("请填写评论内容");
+                }
+                $btn.addClass("disabled");
+                $.post("/course/addComment",{courseId:courseId,content:val,_csrf:$("#pj_csrf").val()},function(req){
+                    $btn.removeClass("disabled");
+                    if(req.success=='true'){
+                        // 评论成功
+                        var comment = req.data.comment;
+                        var user = req.data.user;
+                        $talks.prepend('<li> <div class="talk-user-head"><img src="'+user.avatar+'" alt=""></div> <div class="talk-main"> <div class="talk-p1"><span class="name">'+user.userName+'</span></div> <div class="talk-p2">'+courseTitle+'</div> <div class="talk-p3">'+comment.content+'</div> </div> <div class="talk-time">'+new Date(comment.createTime).format("yyyy-MM-dd hh:mm")+'</div> </li>');
+                        $comment.val('');
+                    }else{
+                        alert(req.data);
+                    }
+                });
+            });
+        })();
+    });
+</script>
+{% endblock %}

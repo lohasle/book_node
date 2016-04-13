@@ -1,0 +1,34 @@
+{% for item in data.coursePage.rows %}
+<li>
+    <div class="active-item">
+
+        <a class="img-s" href="/course/{{item.seq}}"><img src="{{item.frontImg}}"></a>
+        <div class="body-s">
+            <a class="author-span"  href="/course/{{item.seq}}">
+                <i class="fg"></i>
+                <span class="h2">{{item.title}}</span>
+                <span class="author">主讲：{{item.lecturerId.name}}</span>
+            </a>
+
+            <div class="note">
+                {{item.summary|subBtyesStr(250)}}
+            </div>
+            <div class="ext-info">
+                <div class="p"><i class="fa fa-clock-o"></i>
+                    <span class="info-val">{{item.beginTime|mdate('YYYY-MM-DD HH:mm')}}</span>
+                </div>
+                <div class="p">
+                    <i class="fa fa-map-marker m-fix-fa"></i>
+                    <span class="info-val m-fix">{{item.address1}}</span>
+
+                    <div class="hot-join"><i class="fa fa-users"></i><span class="info-val">火热报名中...</span>
+                    </div>
+                </div>
+                <div class="actions">
+                    <a class="btn" target="_blank" href="{{item.bmUrl}}">立即报名</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</li>
+{% endfor %}
